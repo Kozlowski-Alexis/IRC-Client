@@ -1,4 +1,4 @@
-package Tp9_Swing.tp9;
+package TchatIRC;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
