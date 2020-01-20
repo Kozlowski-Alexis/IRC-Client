@@ -7,6 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class Logs extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JButton searchButton;
+	private JComboBox searchBox;
 	private JTextField searchField;
 	private JTextArea resultField;
 	private JLabel mainLabel;
@@ -36,7 +37,8 @@ public class Logs extends JFrame {
 	}
 	
 	public JPanel getSearchPanel() {
-		searchButton = new JButton("Utilisateurs");
+		Object[] users = new Object[] {"Alexis", "Maxence", "Nagib"};
+		searchBox = new JComboBox(users);
 		searchField = new JTextField();
 		mainLabel = new JLabel("Consultation des messages postes");
 		mainLabel.setForeground(Color.white);
@@ -44,7 +46,6 @@ public class Logs extends JFrame {
 		final JPanel searchPanel = new JPanel(new BorderLayout(10,0));
 		searchPanel.setBackground(Color.decode("#434343"));
 		
-		searchButton.setMargin(new Insets(0,80,0,100));
 		searchField.setMargin(new Insets(35, 0, 0, 0));
 		
 		mainLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -52,7 +53,7 @@ public class Logs extends JFrame {
 		searchPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 10));
 		searchPanel.add(mainLabel, BorderLayout.NORTH);
 		searchPanel.add(searchField, BorderLayout.CENTER);
-		searchPanel.add(searchButton, BorderLayout.EAST);
+		searchPanel.add(searchBox, BorderLayout.EAST);
 		
 		return searchPanel;
 	}

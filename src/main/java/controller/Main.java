@@ -1,7 +1,6 @@
 package controller;
 
-import view.LoginForm;
-import view.ModalException;
+import view.Logs;
 import view.TchatIndex;
 
 public class Main {
