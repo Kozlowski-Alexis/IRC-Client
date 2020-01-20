@@ -1,6 +1,7 @@
 package controller;
 
 import view.Logs;
+import view.TchatIndex;
 
 public class Main {
 
