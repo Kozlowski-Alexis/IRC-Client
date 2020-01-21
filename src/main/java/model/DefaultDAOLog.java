@@ -49,7 +49,7 @@ public class DefaultDAOLog extends AbstractDAO implements DAOLog{
 	}
 	@Override
 	public List<Log> list() throws DAOException {
-		final String sql = "SELECT * FROM `Log`";
+		final String sql = "SELECT * FROM `log`";
 
 		final List<Log> logList = new LinkedList<>();
 		

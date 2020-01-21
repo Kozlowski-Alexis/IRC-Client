@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
@@ -21,7 +22,7 @@ public class Logs extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JComboBox searchBox;
+	private JComboBox<String> searchBox;
 	private JTextField searchField;
 	private JTextArea resultField;
 	private JLabel mainLabel;
@@ -33,12 +34,13 @@ public class Logs extends JFrame {
 		content.add(getSearchPanel(), BorderLayout.NORTH);
 		content.add(getResultPanel(), BorderLayout.CENTER);
 		this.setSize(1080, 900);
+		this.setMinimumSize(new Dimension(800, 500));
 		setVisible(true);
 	}
 	
 	public JPanel getSearchPanel() {
-		Object[] users = new Object[] {"Alexis", "Maxence", "Nagib"};
-		searchBox = new JComboBox(users);
+		String[] users = new String[] {"Alexis", "Maxence", "Nagib"};
+		searchBox = new JComboBox<>(users);
 		searchField = new JTextField();
 		mainLabel = new JLabel("Consultation des messages postes");
 		mainLabel.setForeground(Color.white);
@@ -46,7 +48,8 @@ public class Logs extends JFrame {
 		final JPanel searchPanel = new JPanel(new BorderLayout(10,0));
 		searchPanel.setBackground(Color.decode("#434343"));
 		
-		searchField.setMargin(new Insets(35, 0, 0, 0));
+		searchField.setMargin(new Insets(30, 0, 0, 0));
+		searchBox.setPreferredSize(new Dimension(200,25));
 		
 		mainLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		
