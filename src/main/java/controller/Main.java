@@ -33,7 +33,7 @@ public class Main {
 		return null;
 	}
 	
-	public List<Log> getListLogsByUser(String userName){
+	public List<Log> getListLogsByUser(String userName) {
 		Connection c = null;
 		try {
 			c = DAOFactory.getConnection();
@@ -43,6 +43,21 @@ public class Main {
 			
 			return logListUser;
 			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	public List<Log> getListLogsByText(String text) {
+		Connection c = null;
+		try {
+			c = DAOFactory.getConnection();
+			DAOLog logDAO = DAOFactory.getDAOLog(c);
+			
+			final List<Log> logListText = logDAO.listByText(text);
+			
+			return logListText;
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
