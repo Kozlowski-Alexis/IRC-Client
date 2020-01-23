@@ -72,6 +72,22 @@ public class Logs extends JFrame {
 		searchPanel.add(searchField, BorderLayout.CENTER);
 		searchPanel.add(searchBox, BorderLayout.EAST);
 		
+		searchField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String inputItem = searchField.getText();
+				List<Log> listLogsByText = mainController.getListLogsByText(inputItem);
+				if (listLogsByText != null) {
+					resultField.setText("");
+					resultField.append("Les Logs : \n \n");
+					for (Log log : listLogsByText) {
+					    resultField.append(log.getDate()+" :: "+log.getUserName()+" - "+log.getMessage()+"\n \n");
+					}
+				} else {
+					resultField.setText("Aucuns Logs !!!");
+				}
+			}
+		});
+		
 		searchBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String selectedItem = (String) searchBox.getSelectedItem();
@@ -80,12 +96,9 @@ public class Logs extends JFrame {
 					resultField.setText("");
 					resultField.append("Les Logs : \n \n");
 					for (Log log : listLogsByUser) {
-					    resultField.append(log.getDate()+" :: "+log.getUserName()+" - "+log.getMessage()+"\n");
+					    resultField.append(log.getDate()+" :: "+log.getUserName()+" - "+log.getMessage()+"\n \n");
 					}
-				} else {
-					resultField.setText("Aucuns Logs !!!");
-				}
-				
+				} 
 			}
 		});
 		
