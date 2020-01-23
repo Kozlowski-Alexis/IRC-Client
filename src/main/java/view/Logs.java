@@ -5,6 +5,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import controller.Main;
+import model.bean.Log;
 
 public class Logs extends JFrame {
 	
@@ -27,20 +35,26 @@ public class Logs extends JFrame {
 	private JTextArea resultField;
 	private JLabel mainLabel;
 	private JLabel resultLabel;
+	private Main mainController;
 
 	public Logs() {
 		super("Tchat IRC V0.1");
+		mainController = new Main();
+		resultField = new JTextArea("Aucuns Logs !!! \n");
 		final Container content = getContentPane();
-		content.add(getSearchPanel(), BorderLayout.NORTH);
+		content.add(getSearchPanel(mainController), BorderLayout.NORTH);
 		content.add(getResultPanel(), BorderLayout.CENTER);
 		this.setSize(1080, 900);
 		this.setMinimumSize(new Dimension(800, 500));
 		setVisible(true);
 	}
 	
-	public JPanel getSearchPanel() {
-		String[] users = new String[] {"Alexis", "Maxence", "Nagib"};
-		searchBox = new JComboBox<>(users);
+	public JPanel getSearchPanel(Main mainController) {
+		List<Log> logList = mainController.getListLogs();
+		searchBox = new JComboBox<String>();
+		for (Log log : logList) {
+		    searchBox.addItem(log.getUserName());
+		}
 		searchField = new JTextField();
 		mainLabel = new JLabel("Consultation des messages postes");
 		mainLabel.setForeground(Color.white);
@@ -58,11 +72,28 @@ public class Logs extends JFrame {
 		searchPanel.add(searchField, BorderLayout.CENTER);
 		searchPanel.add(searchBox, BorderLayout.EAST);
 		
+		searchBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String selectedItem = (String) searchBox.getSelectedItem();
+				List<Log> listLogsByUser =  mainController.getListLogsByUser(selectedItem);
+				if (listLogsByUser != null) {
+					resultField.setText("");
+					resultField.append("Les Logs : \n \n");
+					for (Log log : listLogsByUser) {
+					    resultField.append(log.getDate()+" :: "+log.getUserName()+" - "+log.getMessage()+"\n");
+					}
+				} else {
+					resultField.setText("Aucuns Logs !!!");
+				}
+				
+			}
+		});
+		
 		return searchPanel;
 	}
 	
 	public JPanel getResultPanel() {
-		resultField = new JTextArea();
+		resultField.setEditable(false);
 		resultLabel = new JLabel("Derniers messages");
 		resultLabel.setForeground(Color.white);
 
