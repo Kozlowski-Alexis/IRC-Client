@@ -30,7 +30,7 @@ public class TchatIndex extends JFrame {
 	private JLabel canalLabel;
 	
 	public TchatIndex() {
-		super("Tchat IRC V0.1");
+		super("Tchat IRC V0.1 - Index");
 		final Container content = getContentPane();
 		content.add(getSendMessagePanel(), BorderLayout.SOUTH);
 		content.add(getCanalPanel(), BorderLayout.EAST);
