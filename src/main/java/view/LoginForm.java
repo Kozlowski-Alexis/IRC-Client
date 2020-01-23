@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,7 +22,7 @@ public class LoginForm extends JFrame{
 	private JLabel loginLabel;
 	private JTextField loginField;
 	private JLabel passwordLabel;
-	private JTextField passwordField;
+	private JPasswordField passwordField;
 	private JButton submitButton;
 	
 	public LoginForm() {
@@ -45,6 +47,7 @@ public class LoginForm extends JFrame{
 		
 		
 		final JPanel labelPanel = new JPanel(new GridLayout(3 , 5, 5 , 5));
+		
 		
 		labelPanel.add(urlPortLabel);
 		labelPanel.add(loginLabel);
@@ -77,6 +80,17 @@ public class LoginForm extends JFrame{
 	
 	public JPanel getSubmitPanel() {
 		submitButton = new JButton("Se connecter");
+		
+
+		submitButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(loginField.getText());
+				System.out.println(passwordField.getPassword());
+				
+			}
+		});
+		
 		final JPanel submitPanel = new JPanel(new BorderLayout());
 		
 		

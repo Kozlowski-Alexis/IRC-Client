@@ -43,6 +43,13 @@ public class TchatIndex extends JFrame {
 		submitButton = new JButton("Envoyer");
 		sendMessageField = new JTextField();
 		
+		submitButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(sendMessageField.getText());
+			}
+		});
+		
 		final JPanel sendMessagePanel = new JPanel(new BorderLayout(10,0));
 		sendMessagePanel.setBackground(Color.decode("#434343"));
 		
