@@ -3,7 +3,9 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -11,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public class TchatIndex extends JFrame {
 	/**
@@ -19,7 +22,8 @@ public class TchatIndex extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private JButton submitButton;
-	private JTextField sendMessageField;
+	private JTextArea sendMessageField;
+	private JScrollPane sendMessagePane;
 	private JTextArea canalsField;
 	private JTextArea membersField;
 	private JScrollPane canalsPane;
@@ -28,6 +32,7 @@ public class TchatIndex extends JFrame {
 	private JScrollPane messagePane;
 	private JLabel memberLabel;
 	private JLabel canalLabel;
+	private JLabel titleLabel;
 	
 	public TchatIndex() {
 		super("Tchat IRC V0.1 - Index");
@@ -35,13 +40,37 @@ public class TchatIndex extends JFrame {
 		content.add(getSendMessagePanel(), BorderLayout.SOUTH);
 		content.add(getCanalPanel(), BorderLayout.EAST);
 		content.add(getMessagePanel(), BorderLayout.CENTER);
+		this.setMinimumSize(new Dimension(1000, 700));
 		this.setSize(1080, 900);
 		setVisible(true);
 	}
 	
 	public JPanel getSendMessagePanel() {
 		submitButton = new JButton("Envoyer");
-		sendMessageField = new JTextField();
+		sendMessageField = new JTextArea(4, 4);
+		sendMessagePane = new JScrollPane(sendMessageField);
+		sendMessageField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	
+		sendMessageField.setBackground(Color.decode("#4a86e8"));
+		sendMessageField.setForeground(Color.white);
+		sendMessageField.setFont(new Font("Arial", Font.BOLD, 13));
+		
+		submitButton.setMargin(new Insets(0,70,0,100));
+		submitButton.setBackground(Color.decode("#4a86e8"));
+		submitButton.setForeground(Color.white);
+		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
+		
+		final JPanel submitPanel = new JPanel(new BorderLayout());
+		submitPanel.add(submitButton);
+		submitPanel.setBorder(new LineBorder(Color.white, 2, true));
+		
+		sendMessagePane.setBorder(new LineBorder(Color.white, 2, true));
+		
+		final JPanel sendMessagePanel = new JPanel(new BorderLayout(20,0));
+		sendMessagePanel.setBackground(Color.decode("#434343"));
+		sendMessagePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		sendMessagePanel.add(sendMessagePane, BorderLayout.CENTER);
+		sendMessagePanel.add(submitPanel, BorderLayout.EAST);
 		
 		submitButton.addActionListener(new ActionListener() {
 			
@@ -49,16 +78,6 @@ public class TchatIndex extends JFrame {
 				System.out.println(sendMessageField.getText());
 			}
 		});
-		
-		final JPanel sendMessagePanel = new JPanel(new BorderLayout(10,0));
-		sendMessagePanel.setBackground(Color.decode("#434343"));
-		
-		submitButton.setMargin(new Insets(0,80,0,100));
-		sendMessageField.setMargin(new Insets(35, 0, 0, 0));
-		
-		sendMessagePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		sendMessagePanel.add(sendMessageField, BorderLayout.CENTER);
-		sendMessagePanel.add(submitButton, BorderLayout.EAST);
 		
 		return sendMessagePanel;
 	}
@@ -99,14 +118,34 @@ public class TchatIndex extends JFrame {
 		messageField = new JTextArea();
 		messageField.setEditable(false);
 		messagePane = new JScrollPane(messageField);
+		messageField.setBackground(Color.decode("#4a86e8"));
+		messageField.setForeground(Color.white);
+		messageField.setFont(new Font("Arial", Font.BOLD, 13));
+		messageField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		titleLabel = new JLabel("Tchat IRC", SwingConstants.CENTER);
+		titleLabel.setForeground(Color.white);
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+		
+		final JPanel titlePanel = new JPanel(new BorderLayout());
+		titlePanel.setBackground(Color.decode("#434343"));
+		titlePanel.add(titleLabel, BorderLayout.CENTER);
+		
+		final JPanel textAreaPanel = new JPanel(new BorderLayout());
+		textAreaPanel.setBackground(Color.decode("#434343"));
+		textAreaPanel.setBorder(new LineBorder(Color.white, 2, true));
+		textAreaPanel.add(messagePane, BorderLayout.CENTER);
 		
 		final JPanel messagePanel = new JPanel(new BorderLayout());
-		messagePanel.setBackground(Color.decode("#434343"));
-		
 		messagePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		messagePanel.setBackground(Color.decode("#434343"));
+		messagePanel.add(textAreaPanel, BorderLayout.CENTER);
 		
-		messagePanel.add(messagePane, BorderLayout.CENTER);
+		final JPanel contentPanel = new JPanel(new BorderLayout());
+		contentPanel.add(titlePanel, BorderLayout.NORTH);
+		contentPanel.add(messagePanel, BorderLayout.CENTER);
 		
-		return messagePanel;
+		return contentPanel;
 	}
 }
