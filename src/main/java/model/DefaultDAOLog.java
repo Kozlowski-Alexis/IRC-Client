@@ -49,7 +49,7 @@ public class DefaultDAOLog extends AbstractDAO implements DAOLog{
 	}
 	@Override
 	public List<Log> list() throws DAOException {
-		final String sql = "SELECT * FROM `Log`";
+		final String sql = "SELECT DISTINCT(`user_name`) FROM `log`";
 
 		final List<Log> logList = new LinkedList<>();
 		
@@ -58,6 +58,69 @@ public class DefaultDAOLog extends AbstractDAO implements DAOLog{
 		
 		try {
 			st = connect.prepareStatement(sql);
+			r = st.executeQuery();
+			
+			while(r.next()) {
+				final Log l = new Log();
+				l.setUserName(r.getString("user_name"));
+				
+				logList.add(l);
+			}
+			
+			return logList;
+			
+		} catch (SQLException e) {
+			throw new DAOException("Error during loading log from database.",e);
+		} finally {
+			DAOUtils.close(r, st);
+		}
+	}
+	
+	@Override
+	public List<Log> listByUser(String userName) throws DAOException {
+		final String sql = "SELECT * FROM `log` WHERE `user_name`= ?";
+
+		final List<Log> logList = new LinkedList<>();
+		
+		PreparedStatement st = null;
+		ResultSet r = null;
+		
+		try {
+			st = connect.prepareStatement(sql);
+			st.setString(1, userName);
+			r = st.executeQuery();
+			
+			while(r.next()) {
+				final Log l = new Log();
+				l.setId(r.getInt("id"));
+				l.setUserName(r.getString("user_name"));
+				l.setMessage(r.getString("message"));
+				l.setDate(r.getDate("date"));
+				
+				logList.add(l);
+			}
+			
+			return logList;
+			
+		} catch (SQLException e) {
+			throw new DAOException("Error during loading log from database.",e);
+		} finally {
+			DAOUtils.close(r, st);
+		}
+	}
+	
+	@Override
+	public List<Log> listByText(String text) throws DAOException {
+		final String sql = "SELECT * FROM `log` WHERE `message` LIKE ?";
+
+		final List<Log> logList = new LinkedList<>();
+		
+		PreparedStatement st = null;
+		ResultSet r = null;
+		
+		try {
+			st = connect.prepareStatement(sql);
+			st.setString(1, "%"+text+"%");
 			r = st.executeQuery();
 			
 			while(r.next()) {

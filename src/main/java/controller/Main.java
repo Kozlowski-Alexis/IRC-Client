@@ -1,17 +1,67 @@
 package controller;
 
-import view.LoginForm;
-import view.ModalException;
+import java.sql.Connection;
+import java.util.List;
+
+import model.DAOException;
+import model.DAOFactory;
+import model.DAOLog;
+import model.bean.Log;
+import view.Logs;
 import view.TchatIndex;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//TchatIndex tchatIndex = new TchatIndex();
-		//LoginForm loginForm = new LoginForm();
-		
-		ModalException modalException = new ModalException("Je suis une grosse erreur");
+		Logs logs = new Logs();
+	}
+	
+	public List<Log> getListLogs() {
+		Connection c = null;
+		try {
+			c = DAOFactory.getConnection();
+			DAOLog logDAO = DAOFactory.getDAOLog(c);
+			
+			final List<Log> logList = logDAO.list();
+			
+			return logList;
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<Log> getListLogsByUser(String userName) {
+		Connection c = null;
+		try {
+			c = DAOFactory.getConnection();
+			DAOLog logDAO = DAOFactory.getDAOLog(c);
+			
+			final List<Log> logListUser = logDAO.listByUser(userName);
+			
+			return logListUser;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	public List<Log> getListLogsByText(String text) {
+		Connection c = null;
+		try {
+			c = DAOFactory.getConnection();
+			DAOLog logDAO = DAOFactory.getDAOLog(c);
+			
+			final List<Log> logListText = logDAO.listByText(text);
+			
+			return logListText;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }
