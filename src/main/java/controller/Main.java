@@ -7,6 +7,7 @@ import model.DAOException;
 import model.DAOFactory;
 import model.DAOLog;
 import model.bean.Log;
+import view.LoginForm;
 import view.Logs;
 import view.TchatIndex;
 
@@ -14,7 +15,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		//Logs logs = new Logs();
-		TchatIndex tchatindex = new TchatIndex();
+		//TchatIndex tchatindex = new TchatIndex();
+		LoginForm loginform = new LoginForm();
 	}
 	
 	public List<Log> getListLogs() {

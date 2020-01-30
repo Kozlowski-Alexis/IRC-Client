@@ -62,6 +62,7 @@ public class TchatIndex extends JFrame {
 		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
 		submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
+		
 		final JPanel submitPanel = new JPanel(new BorderLayout());
 		submitPanel.add(submitButton);
 		submitPanel.setBorder(new LineBorder(Color.white, 2, true));
