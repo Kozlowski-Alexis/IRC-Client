@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -55,10 +56,11 @@ public class TchatIndex extends JFrame {
 		sendMessageField.setForeground(Color.white);
 		sendMessageField.setFont(new Font("Arial", Font.BOLD, 13));
 		
-		submitButton.setMargin(new Insets(0,70,0,100));
+		submitButton.setMargin(new Insets(0,98,0,100));
 		submitButton.setBackground(Color.decode("#4a86e8"));
 		submitButton.setForeground(Color.white);
 		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
+		submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		final JPanel submitPanel = new JPanel(new BorderLayout());
 		submitPanel.add(submitButton);
@@ -85,10 +87,28 @@ public class TchatIndex extends JFrame {
 	public JPanel getCanalPanel() {
 		canalsField = new JTextArea(15, 15);
 		canalsField.setEditable(false);
+		canalsField.setBackground(Color.decode("#4a86e8"));
+		canalsField.setForeground(Color.white);
+		canalsField.setFont(new Font("Arial", Font.BOLD, 13));
+		canalsField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		
 		canalsPane = new JScrollPane(canalsField);
+		canalsPane.setBackground(Color.decode("#434343"));
+		canalsPane.setBorder(new LineBorder(Color.white, 2, true));
+		
+		
 		membersField = new JTextArea(15, 15);
 		membersField.setEditable(false);
+		membersField.setBackground(Color.decode("#4a86e8"));
+		membersField.setForeground(Color.white);
+		membersField.setFont(new Font("Arial", Font.BOLD, 13));
+		membersField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
 		membersPane = new JScrollPane(membersField);
+		membersPane.setBackground(Color.decode("#434343"));
+		membersPane.setBorder(new LineBorder(Color.white, 2, true));
+		
 		memberLabel = new JLabel("Membres sur ce canal");
 		canalLabel = new JLabel("Autres canaux");
 		memberLabel.setForeground(Color.white);
