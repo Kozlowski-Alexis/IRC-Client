@@ -9,14 +9,16 @@ import model.DAOLog;
 import model.bean.Log;
 import view.LoginForm;
 import view.Logs;
+import view.ModalException;
 import view.TchatIndex;
 
 public class Main {
 
 	public static void main(String[] args) {
-		//Logs logs = new Logs();
-		//TchatIndex tchatindex = new TchatIndex();
-		LoginForm loginform = new LoginForm();
+		// Logs logs = new Logs();
+		// TchatIndex tchatindex = new TchatIndex();
+		 LoginForm loginform = new LoginForm();
+		// ModalException modal = new ModalException("Aie , c'est vraiment la merde !");
 	}
 	
 	public List<Log> getListLogs() {

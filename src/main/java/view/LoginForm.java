@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class LoginForm extends JFrame{
@@ -28,17 +29,30 @@ public class LoginForm extends JFrame{
 	private JLabel passwordLabel;
 	private JPasswordField passwordField;
 	private JButton submitButton;
+	private JLabel titleLabel;
 	
 	public LoginForm() {
 		super("Tchat IRC V0.1 - Connexion");
 		final Container content = getContentPane();
+		content.add(getTitlePanel(), BorderLayout.NORTH);
 		content.add(getContentPanel(), BorderLayout.CENTER);
 		content.add(getSubmitPanel(), BorderLayout.SOUTH);
-		this.setSize(600, 250);
+		this.setSize(600, 350);
 		this.setResizable(false);
 		setVisible(true);
 	}
 	
+	public JPanel getTitlePanel() {
+		final JPanel titlePanel = new JPanel(new BorderLayout());
+		titleLabel = new JLabel("Connexion", SwingConstants.CENTER);
+		titleLabel.setForeground(Color.white);
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+		titlePanel.setBackground(Color.decode("#434343"));
+		titlePanel.add(titleLabel, BorderLayout.CENTER);
+		
+		return titlePanel;
+	}
 	
 	public JPanel getContentPanel() {
 		
