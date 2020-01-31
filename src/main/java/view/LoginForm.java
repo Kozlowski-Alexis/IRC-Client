@@ -20,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import controller.LogsController;
+
 public class LoginForm extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JLabel urlPortLabel;
@@ -29,6 +31,7 @@ public class LoginForm extends JFrame{
 	private JLabel passwordLabel;
 	private JPasswordField passwordField;
 	private JButton submitButton;
+	private JButton logsButton;
 	private JLabel titleLabel;
 	
 	public LoginForm() {
@@ -37,7 +40,7 @@ public class LoginForm extends JFrame{
 		content.add(getTitlePanel(), BorderLayout.NORTH);
 		content.add(getContentPanel(), BorderLayout.CENTER);
 		content.add(getSubmitPanel(), BorderLayout.SOUTH);
-		this.setSize(600, 350);
+		this.setSize(600, 375);
 		this.setResizable(false);
 		setVisible(true);
 	}
@@ -127,23 +130,43 @@ public class LoginForm extends JFrame{
 		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
 		submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
+		logsButton = new JButton("Accéder aux logs");
+		logsButton.setBackground(Color.decode("#4a86e8"));
+		logsButton.setForeground(Color.white);
+		logsButton.setFont(new Font("Arial", Font.BOLD, 13));
+		logsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
 
 		submitButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(urlPortField.getText());
 				System.out.println(loginField.getText());
 				System.out.println(passwordField.getPassword());
 				
 			}
 		});
 		
+		logsButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				LogsController logs = new LogsController();
+			}
+		});
+		
+		final JPanel logsPanel = new JPanel(new BorderLayout());
+		logsPanel.add(logsButton, BorderLayout.CENTER);
+		logsPanel.setBorder(new LineBorder(Color.white, 2, true));
+		logsPanel.setBackground(Color.decode("#434343"));
+		
 		final JPanel submitPanel = new JPanel(new BorderLayout());
 		submitPanel.add(submitButton, BorderLayout.CENTER);
 		submitPanel.setBorder(new LineBorder(Color.white, 2, true));
 		submitPanel.setBackground(Color.decode("#434343"));
 		
-		final JPanel contentPanel = new JPanel(new BorderLayout());
-		contentPanel.add(submitPanel, BorderLayout.CENTER);
+		final JPanel contentPanel = new JPanel(new GridLayout(2 , 5, 5 , 10));
+		contentPanel.add(submitPanel);
+		contentPanel.add(logsPanel);
 		contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 		contentPanel.setBackground(Color.decode("#434343"));
 		

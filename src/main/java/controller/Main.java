@@ -15,10 +15,10 @@ import view.TchatIndex;
 public class Main {
 
 	public static void main(String[] args) {
-		// Logs logs = new Logs();
-		// TchatIndex tchatindex = new TchatIndex();
+		 // Logs logs = new Logs();
+		 // TchatIndex tchatindex = new TchatIndex();
 		 LoginForm loginform = new LoginForm();
-		// ModalException modal = new ModalException("Aie , c'est vraiment la merde !");
+		 // ModalException modal = new ModalException("Aie , c'est vraiment la merde !");
 	}
 	
 	public List<Log> getListLogs() {
