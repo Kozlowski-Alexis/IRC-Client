@@ -3,7 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+
+import controller.LogsController;
 
 public class LoginForm extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -24,17 +31,31 @@ public class LoginForm extends JFrame{
 	private JLabel passwordLabel;
 	private JPasswordField passwordField;
 	private JButton submitButton;
+	private JButton logsButton;
+	private JLabel titleLabel;
 	
 	public LoginForm() {
 		super("Tchat IRC V0.1 - Connexion");
 		final Container content = getContentPane();
+		content.add(getTitlePanel(), BorderLayout.NORTH);
 		content.add(getContentPanel(), BorderLayout.CENTER);
 		content.add(getSubmitPanel(), BorderLayout.SOUTH);
-		this.setSize(600, 250);
+		this.setSize(600, 375);
 		this.setResizable(false);
 		setVisible(true);
 	}
 	
+	public JPanel getTitlePanel() {
+		final JPanel titlePanel = new JPanel(new BorderLayout());
+		titleLabel = new JLabel("Connexion", SwingConstants.CENTER);
+		titleLabel.setForeground(Color.white);
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+		titlePanel.setBackground(Color.decode("#434343"));
+		titlePanel.add(titleLabel, BorderLayout.CENTER);
+		
+		return titlePanel;
+	}
 	
 	public JPanel getContentPanel() {
 		
@@ -55,50 +76,102 @@ public class LoginForm extends JFrame{
 		
 		labelPanel.setBackground(Color.decode("#434343"));
 		
+		final JPanel urlPortPanel = new JPanel(new BorderLayout());
 		urlPortField = new JTextField(30);
+		urlPortField.setBackground(Color.decode("#4a86e8"));
+		urlPortField.setForeground(Color.white);
+		urlPortField.setFont(new Font("Arial", Font.BOLD, 13));
+		urlPortField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		urlPortPanel.add(urlPortField);
+		urlPortPanel.setBorder(new LineBorder(Color.white, 2, true));
+		
+		final JPanel loginPanel = new JPanel(new BorderLayout());
 		loginField = new JTextField(30);
+		loginField.setBackground(Color.decode("#4a86e8"));
+		loginField.setForeground(Color.white);
+		loginField.setFont(new Font("Arial", Font.BOLD, 13));
+		loginField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		loginPanel.add(loginField);
+		loginPanel.setBorder(new LineBorder(Color.white, 2, true));
+		
+		
+		final JPanel passwordPanel = new JPanel(new BorderLayout());
 		passwordField = new JPasswordField(30);
+		passwordField.setBackground(Color.decode("#4a86e8"));
+		passwordField.setForeground(Color.white);
+		passwordField.setFont(new Font("Arial", Font.BOLD, 13));
+		passwordField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		passwordPanel.add(passwordField);
+		passwordPanel.setBorder(new LineBorder(Color.white, 2, true));
+		
 		final JPanel fieldsPanel = new JPanel(new GridLayout(3 , 5, 5 , 5));
-		
-		fieldsPanel.add(urlPortField);
-		fieldsPanel.add(loginField);
-		fieldsPanel.add(passwordField);
-		
 		fieldsPanel.setBackground(Color.decode("#434343"));
+		
+		fieldsPanel.add(urlPortPanel);
+		fieldsPanel.add(loginPanel);
+		fieldsPanel.add(passwordPanel);
+		
 		
 		final JPanel contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-		
 		contentPanel.add(labelPanel, BorderLayout.WEST);
 		contentPanel.add(fieldsPanel, BorderLayout.EAST);
-		
 		contentPanel.setBackground(Color.decode("#434343"));
 		
 		setResizable(false);
+		
 		return contentPanel;
 	}
 	
 	public JPanel getSubmitPanel() {
 		submitButton = new JButton("Se connecter");
+		submitButton.setBackground(Color.decode("#4a86e8"));
+		submitButton.setForeground(Color.white);
+		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
+		submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+		logsButton = new JButton("Accéder aux logs");
+		logsButton.setBackground(Color.decode("#4a86e8"));
+		logsButton.setForeground(Color.white);
+		logsButton.setFont(new Font("Arial", Font.BOLD, 13));
+		logsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 
 		submitButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(urlPortField.getText());
 				System.out.println(loginField.getText());
 				System.out.println(passwordField.getPassword());
 				
 			}
 		});
 		
+		logsButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				LogsController logs = new LogsController();
+			}
+		});
+		
+		final JPanel logsPanel = new JPanel(new BorderLayout());
+		logsPanel.add(logsButton, BorderLayout.CENTER);
+		logsPanel.setBorder(new LineBorder(Color.white, 2, true));
+		logsPanel.setBackground(Color.decode("#434343"));
+		
 		final JPanel submitPanel = new JPanel(new BorderLayout());
-		
-		
 		submitPanel.add(submitButton, BorderLayout.CENTER);
-		submitPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-		
+		submitPanel.setBorder(new LineBorder(Color.white, 2, true));
 		submitPanel.setBackground(Color.decode("#434343"));
 		
-		return submitPanel;
+		final JPanel contentPanel = new JPanel(new GridLayout(2 , 5, 5 , 10));
+		contentPanel.add(submitPanel);
+		contentPanel.add(logsPanel);
+		contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+		contentPanel.setBackground(Color.decode("#434343"));
+		
+		
+		
+		return contentPanel;
 	}
 }
