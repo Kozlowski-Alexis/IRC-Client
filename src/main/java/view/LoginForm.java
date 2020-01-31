@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import controller.LoginFormController;
 import controller.LogsController;
 
 public class LoginForm extends JFrame{
@@ -34,12 +35,12 @@ public class LoginForm extends JFrame{
 	private JButton logsButton;
 	private JLabel titleLabel;
 	
-	public LoginForm() {
+	public LoginForm(LoginFormController loginController) {
 		super("Tchat IRC V0.1 - Connexion");
 		final Container content = getContentPane();
 		content.add(getTitlePanel(), BorderLayout.NORTH);
 		content.add(getContentPanel(), BorderLayout.CENTER);
-		content.add(getSubmitPanel(), BorderLayout.SOUTH);
+		content.add(getSubmitPanel(loginController), BorderLayout.SOUTH);
 		this.setSize(600, 375);
 		this.setResizable(false);
 		setVisible(true);
@@ -123,7 +124,7 @@ public class LoginForm extends JFrame{
 		return contentPanel;
 	}
 	
-	public JPanel getSubmitPanel() {
+	public JPanel getSubmitPanel(LoginFormController loginController) {
 		submitButton = new JButton("Se connecter");
 		submitButton.setBackground(Color.decode("#4a86e8"));
 		submitButton.setForeground(Color.white);
@@ -140,17 +141,14 @@ public class LoginForm extends JFrame{
 		submitButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(urlPortField.getText());
-				System.out.println(loginField.getText());
-				System.out.println(passwordField.getPassword());
-				
+				loginController.login(urlPortField.getText(), loginField.getText(), passwordField.getPassword());
 			}
 		});
 		
 		logsButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				LogsController logs = new LogsController();
+				LogsController logsController = new LogsController();
 			}
 		});
 		

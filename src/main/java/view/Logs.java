@@ -5,15 +5,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,8 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import controller.Main;
+import controller.LogsController;
 import model.bean.Log;
+
 
 public class Logs extends JFrame {
 	
@@ -34,26 +31,24 @@ public class Logs extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private JComboBox<String> searchBox;
-	private JTextArea searchField;
+	private JTextField searchField;
 	private JTextArea resultField;
 	private JLabel mainLabel;
 	private JLabel titleLabel;
 	private JLabel resultLabel;
-	// private Main mainController;
 
-	public Logs() {
+	public Logs(LogsController logsController) {
 		super("Tchat IRC V0.1");
-		// mainController = new Main();
 		resultField = new JTextArea("Aucuns Logs !!! \n");
 		final Container content = getContentPane();
-		content.add(getSearchPanel(/*mainController*/), BorderLayout.NORTH);
+		content.add(getSearchPanel(logsController), BorderLayout.NORTH);
 		content.add(getResultPanel(), BorderLayout.CENTER);
 		this.setSize(1080, 900);
 		this.setMinimumSize(new Dimension(800, 500));
 		setVisible(true);
 	}
 	
-	public JPanel getSearchPanel(/*Main mainController*/) {
+	public JPanel getSearchPanel(LogsController logsController) {
 		
 		final JPanel searchBoxPanel = new JPanel(new BorderLayout());
 		searchBox = new JComboBox<String>();
@@ -64,11 +59,10 @@ public class Logs extends JFrame {
 		searchBox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		searchBoxPanel.add(searchBox);
 		searchBoxPanel.setBorder(new LineBorder(Color.white, 2, true));
-		
-		/*List<Log> logList = mainController.getListLogs();
+		List<Log> logList = logsController.getListLogs();
 		for (Log log : logList) {
 		   searchBox.addItem(log.getUserName());
-		}*/
+		}
 		final JPanel titlePanel = new JPanel(new BorderLayout());
 		titleLabel = new JLabel("Logs", SwingConstants.CENTER);
 		titleLabel.setForeground(Color.white);
@@ -78,7 +72,7 @@ public class Logs extends JFrame {
 		titlePanel.add(titleLabel, BorderLayout.CENTER);
 		
 		final JPanel searchFieldPanel = new JPanel(new BorderLayout());
-		searchField = new JTextArea(2, 15);
+		searchField = new JTextField();
 		searchField.setBackground(Color.decode("#4a86e8"));
 		searchField.setForeground(Color.white);
 		searchField.setFont(new Font("Arial", Font.BOLD, 13));
@@ -101,11 +95,12 @@ public class Logs extends JFrame {
 		final JPanel contentPanel = new JPanel(new BorderLayout());
 		contentPanel.add(titlePanel, BorderLayout.NORTH);
 		contentPanel.add(searchPanel, BorderLayout.CENTER);
-		
-		/*searchField.addActionListener(new ActionListener() {
+		searchField.addActionListener(new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				String inputItem = searchField.getText();
-				List<Log> listLogsByText = mainController.getListLogsByText(inputItem);
+				List<Log> listLogsByText = logsController.getListLogsByText(inputItem);
 				if (listLogsByText != null) {
 					resultField.setText("");
 					resultField.append("Les Logs : \n \n");
@@ -116,12 +111,12 @@ public class Logs extends JFrame {
 					resultField.setText("Aucuns Logs !!!");
 				}
 			}
-		});*/
+		}); 
 		
-		/*searchBox.addActionListener(new ActionListener() {
+		searchBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String selectedItem = (String) searchBox.getSelectedItem();
-				List<Log> listLogsByUser =  mainController.getListLogsByUser(selectedItem);
+				List<Log> listLogsByUser =  logsController.getListLogsByUser(selectedItem);
 				if (listLogsByUser != null) {
 					resultField.setText("");
 					resultField.append("Les Logs : \n \n");
@@ -130,7 +125,7 @@ public class Logs extends JFrame {
 					}
 				} 
 			}
-		});*/
+		});
 		
 		return contentPanel;
 	}
