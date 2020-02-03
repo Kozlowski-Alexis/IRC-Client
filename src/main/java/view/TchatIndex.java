@@ -11,10 +11,24 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import controller.TchatIndexController;
 
 public class TchatIndex extends JFrame {
 	/**
@@ -34,11 +48,18 @@ public class TchatIndex extends JFrame {
 	private JLabel memberLabel;
 	private JLabel canalLabel;
 	private JLabel titleLabel;
+	private Socket client;
+	private TchatIndexController tchatController;
 	
-	public TchatIndex() {
+	public TchatIndex(TchatIndexController tchatController, Socket client) {
 		super("Tchat IRC V0.1 - Index");
+		messageField = new JTextArea();
+		canalsField = new JTextArea(15, 15);
+		this.client = client;
+		this.tchatController = tchatController;
 		final Container content = getContentPane();
-		content.add(getSendMessagePanel(), BorderLayout.SOUTH);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content.add(getSendMessagePanel(tchatController), BorderLayout.SOUTH);
 		content.add(getCanalPanel(), BorderLayout.EAST);
 		content.add(getMessagePanel(), BorderLayout.CENTER);
 		this.setMinimumSize(new Dimension(1000, 700));
@@ -46,7 +67,7 @@ public class TchatIndex extends JFrame {
 		setVisible(true);
 	}
 	
-	public JPanel getSendMessagePanel() {
+	public JPanel getSendMessagePanel(TchatIndexController tchatIndexController) {
 		submitButton = new JButton("Envoyer");
 		sendMessageField = new JTextArea(4, 4);
 		sendMessagePane = new JScrollPane(sendMessageField);
@@ -78,7 +99,7 @@ public class TchatIndex extends JFrame {
 		submitButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(sendMessageField.getText());
+				tchatIndexController.sendMessage(sendMessageField.getText(), "default");
 			}
 		});
 		
@@ -86,7 +107,6 @@ public class TchatIndex extends JFrame {
 	}
 	
 	public JPanel getCanalPanel() {
-		canalsField = new JTextArea(15, 15);
 		canalsField.setEditable(false);
 		canalsField.setBackground(Color.decode("#4a86e8"));
 		canalsField.setForeground(Color.white);
@@ -135,8 +155,21 @@ public class TchatIndex extends JFrame {
 		return canalsMembersPanel;
 	}
 	
+	public JTextArea setMessageField(String login, String message) {
+		String newligne = System.getProperty("line.separator");
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		messageField.append("["+timeStamp+"] - <"+login+"> - "+message+newligne+newligne);
+		return messageField;
+	}
+	
+	public JTextArea setCanalField(JSONArray canals) {
+		canals.forEach(canal -> {
+			canalsField.append(canal.toString());
+        });	
+		return canalsField;
+	}
+	
 	public JPanel getMessagePanel() {
-		messageField = new JTextArea();
 		messageField.setEditable(false);
 		messagePane = new JScrollPane(messageField);
 		messageField.setBackground(Color.decode("#4a86e8"));
@@ -168,5 +201,14 @@ public class TchatIndex extends JFrame {
 		contentPanel.add(messagePanel, BorderLayout.CENTER);
 		
 		return contentPanel;
+	}
+	
+	public void close() {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				tchatController.logout();
+				}
+		});
 	}
 }

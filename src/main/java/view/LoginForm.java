@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,6 +25,7 @@ import controller.LoginFormController;
 import controller.LogsController;
 
 public class LoginForm extends JFrame{
+	
 	private static final long serialVersionUID = 1L;
 	private JLabel urlPortLabel;
 	private JTextField urlPortField;
@@ -38,6 +40,7 @@ public class LoginForm extends JFrame{
 	public LoginForm(LoginFormController loginController) {
 		super("Tchat IRC V0.1 - Connexion");
 		final Container content = getContentPane();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		content.add(getTitlePanel(), BorderLayout.NORTH);
 		content.add(getContentPanel(), BorderLayout.CENTER);
 		content.add(getSubmitPanel(loginController), BorderLayout.SOUTH);
@@ -149,6 +152,7 @@ public class LoginForm extends JFrame{
 			
 			public void actionPerformed(ActionEvent arg0) {
 				LogsController logsController = new LogsController();
+				close();
 			}
 		});
 		
@@ -171,5 +175,10 @@ public class LoginForm extends JFrame{
 		
 		
 		return contentPanel;
+	}
+	
+	private void close() {
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 }

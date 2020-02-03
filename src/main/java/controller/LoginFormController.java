@@ -3,15 +3,16 @@ package controller;
 import java.io.IOException;
 import java.net.Socket;
 
-import controller.threads.AppClientInputThread;
-import controller.threads.AppClientScreenThread;
+import controller.threads.LoginInputThread;
+import controller.threads.LoginScreenThread;
 import view.LoginForm;
 import view.ModalException;
 
 public class LoginFormController {
+	private LoginForm loginView;
 	
 	public LoginFormController() {
-		LoginForm loginView = new LoginForm(this);
+		loginView = new LoginForm(this);
 	}
 	
 	public void login(String host, String login, char[] pass) {
@@ -23,10 +24,10 @@ public class LoginFormController {
 			final Socket clientSocket = new Socket(url, port);
 
 			// Start thread on client screen
-			new Thread(new AppClientScreenThread(clientSocket)).start();
+			new Thread(new LoginScreenThread(clientSocket, login, String.valueOf(pass), this.loginView)).start();
 			
 			// Start thread on client input
-			new Thread(new AppClientInputThread(clientSocket, login, String.valueOf(pass))).start();
+			new Thread(new LoginInputThread(clientSocket, login, String.valueOf(pass))).start();
 			
 
 		} catch (IOException e) {

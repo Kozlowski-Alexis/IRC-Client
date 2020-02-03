@@ -40,6 +40,7 @@ public class Logs extends JFrame {
 	public Logs(LogsController logsController) {
 		super("Tchat IRC V0.1");
 		resultField = new JTextArea("Aucuns Logs !!! \n");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		final Container content = getContentPane();
 		content.add(getSearchPanel(logsController), BorderLayout.NORTH);
 		content.add(getResultPanel(), BorderLayout.CENTER);
