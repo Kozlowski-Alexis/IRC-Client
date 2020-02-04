@@ -15,11 +15,13 @@ public class MembersListInputThread implements Runnable {
 	final Socket client;
 	final String login;
 	final String pass;
+	final String channel;
 
-	public MembersListInputThread(Socket client, String login, String pass) {
+	public MembersListInputThread(Socket client, String login, String pass, String channel) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
+		this.channel = channel;
 	}
 
 	@Override
@@ -37,7 +39,8 @@ public class MembersListInputThread implements Runnable {
 			obj = new JSONObject();
 			obj.put("login", login);
 			obj.put("password", pass);
-			obj.put("instruction", "connect");
+			obj.put("channel", channel);
+			obj.put("instruction", "list_channel_members");
 			final String msg = obj.toString();
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
@@ -47,10 +50,7 @@ public class MembersListInputThread implements Runnable {
 			LOG.error("Error socket init.", e);
 		} catch (IOException e) {
 			LOG.error("Error during getting socket outputstream.", e);
-		} finally {
-			Thread.currentThread().interrupt();
-		}
-
+		} 
 	}
 
 }

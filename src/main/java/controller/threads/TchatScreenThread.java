@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import view.ModalException;
@@ -33,6 +34,7 @@ public class TchatScreenThread implements Runnable {
 
 			// Read the first line of the network stream
 			String line = br.readLine();
+			System.out.println(line);
 			while (client.isClosed() == false) {
 				JSONObject jsonObject = new JSONObject(line);
 				Integer code = jsonObject.getInt("code");
@@ -41,10 +43,21 @@ public class TchatScreenThread implements Runnable {
 					String user = jsonObject.getString("user");
 					tchatView.setMessageField(user, message);
 
-				} else if (code == 130 && code == 200) {
+				} 
+				if (120 == code) {
+					JSONArray canals = jsonObject.getJSONArray("all_channel");
+					tchatView.setCanalField(canals);
+
+				}
+				if (110 == code) {
+					JSONArray members = jsonObject.getJSONArray("all_members");
+					tchatView.setMembersField(members);
+					
+				} else if (code != 130 && code != 120 && code != 110 && code != 200) {
 					ModalException exception = new ModalException("Erreur lors de la recuperation des messages");
 				}
 				line = br.readLine();
+				System.out.println(line);
 			}
 
 		} catch (IOException e) {

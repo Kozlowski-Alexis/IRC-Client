@@ -15,11 +15,15 @@ public class CanalRegistrationInputThread implements Runnable {
 	final Socket client;
 	final String login;
 	final String pass;
+	final String oldChannel;
+	final String newChannel;
 
-	public CanalRegistrationInputThread(Socket client, String login, String pass) {
+	public CanalRegistrationInputThread(Socket client, String login, String pass, String oldChannel, String newChannel) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
+		this.oldChannel = oldChannel;
+		this.newChannel = newChannel;
 	}
 
 	@Override
@@ -37,7 +41,9 @@ public class CanalRegistrationInputThread implements Runnable {
 			obj = new JSONObject();
 			obj.put("login", login);
 			obj.put("password", pass);
-			obj.put("instruction", "connect");
+			obj.put("instruction", "subscribe_channel");
+			obj.put("channel", oldChannel);
+			obj.put("target_channel", newChannel);
 			final String msg = obj.toString();
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
@@ -47,10 +53,6 @@ public class CanalRegistrationInputThread implements Runnable {
 			LOG.error("Error socket init.", e);
 		} catch (IOException e) {
 			LOG.error("Error during getting socket outputstream.", e);
-		} finally {
-			Thread.currentThread().interrupt();
-		}
-
+		} 
 	}
-
 }
