@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +20,7 @@ public class DefaultDAOLog extends AbstractDAO implements DAOLog{
 
 	@Override
 	public Log create(Log obj) throws DAOException {
-		final String sql = "INSERT INTO `Log` VALUES (?, ?, ?, ?)";
-		
+		final String sql = "INSERT INTO `log` (`id`, `user_name`, `message`, `date`) VALUES (NULL, ?, ?, ?)";
 		
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -29,8 +29,8 @@ public class DefaultDAOLog extends AbstractDAO implements DAOLog{
 		try {
 			st = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getUserName());
-			st.setString(3, obj.getMessage());
-			st.setDate(4, obj.getDate());
+			st.setString(2, obj.getMessage());
+			st.setDate(3, obj.getDate());
 			r = st.executeUpdate();
 			
 			rs = st.getGeneratedKeys();

@@ -1,6 +1,9 @@
 package controller;
 
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.Date;
+import java.util.Calendar;
 
 import controller.threads.CanalListInputThread;
 import controller.threads.CanalRegistrationInputThread;
@@ -8,6 +11,10 @@ import controller.threads.LogoutInputThread;
 import controller.threads.MembersListInputThread;
 import controller.threads.SendMessageThread;
 import controller.threads.TchatScreenThread;
+import model.DAOException;
+import model.DAOFactory;
+import model.DAOLog;
+import model.bean.Log;
 import view.TchatIndex;
 
 public class TchatIndexController {
@@ -35,6 +42,7 @@ public class TchatIndexController {
 	public void sendMessage(String message) {
 		// Start thread on client input
 		new Thread(new SendMessageThread(client, login, pass, channel, message)).start();
+		insertLog(message);
 	}
 	
 	public void canalRegistration(String newChannel) {
@@ -54,5 +62,23 @@ public class TchatIndexController {
 	
 	public void logout() {
 		new Thread(new LogoutInputThread(client, login, pass)).start();
+	}
+	
+	public void insertLog(String message) {
+		Connection c = null;
+		Log newLog = new Log();
+		newLog.setDate(new Date(Calendar.getInstance().getTime().getTime()));
+		newLog.setMessage(message);
+		newLog.setUserName(login);
+		try {
+			c = DAOFactory.getConnection();
+			DAOLog logDAO = DAOFactory.getDAOLog(c);
+			
+			Log logCreated = logDAO.create(newLog);
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

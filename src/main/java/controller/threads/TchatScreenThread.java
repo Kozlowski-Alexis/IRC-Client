@@ -34,8 +34,9 @@ public class TchatScreenThread implements Runnable {
 
 			// Read the first line of the network stream
 			String line = br.readLine();
-			System.out.println(line);
+			line = br.readLine();
 			while (client.isClosed() == false) {
+				System.out.println(line);
 				JSONObject jsonObject = new JSONObject(line);
 				Integer code = jsonObject.getInt("code");
 				if (130 == code) {
@@ -45,6 +46,7 @@ public class TchatScreenThread implements Runnable {
 
 				} 
 				if (120 == code) {
+					System.out.println(line);
 					JSONArray canals = jsonObject.getJSONArray("all_channel");
 					tchatView.setCanalField(canals);
 
@@ -57,7 +59,6 @@ public class TchatScreenThread implements Runnable {
 					ModalException exception = new ModalException("Erreur lors de la recuperation des messages");
 				}
 				line = br.readLine();
-				System.out.println(line);
 			}
 
 		} catch (IOException e) {

@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.Socket;
@@ -18,6 +20,7 @@ import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.text.BadLocationException;
 
 import org.json.JSONArray;
 
@@ -67,6 +70,33 @@ public class TchatIndex extends JFrame {
 		this.setSize(1080, 900);
 		setVisible(true);
 	}
+	
+	public JTextArea setCanalField(JSONArray canals) {
+		canalsField.setText("");
+		messageField.setText("");
+		String newligne = System.getProperty("line.separator");
+		canals.forEach(canal -> {
+			canalsField.append(canal.toString() + newligne);
+		});
+		return canalsField;
+	}
+
+	public JTextArea setMembersField(JSONArray members) {
+		membersField.setText("");
+		String newligne = System.getProperty("line.separator");
+		members.forEach(member -> {
+			membersField.append("<" + member.toString() + ">" + newligne);
+		});
+		return membersField;
+	}
+	
+	public JTextArea setMessageField(String login, String message) {
+		String newligne = System.getProperty("line.separator");
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		messageField.append("[" + timeStamp + "] - <" + login + "> : " + message + newligne + newligne);
+		return messageField;
+	}
+
 
 	public JPanel getSendMessagePanel(TchatIndexController tchatIndexController) {
 		submitButton = new JButton("Envoyer");
@@ -99,10 +129,11 @@ public class TchatIndex extends JFrame {
 		submitButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				String newChannel = sendMessageField.getText().split("(/new)")[1];
-				if (sendMessageField.getText().equals("/new" + newChannel) || sendMessageField.getText().equals("/quit")) {
-					if (sendMessageField.getText().equals("/new" + newChannel)) {
+				if (sendMessageField.getText().startsWith("/")) {
+					if (sendMessageField.getText().startsWith("/new")) {
+						String newChannel = sendMessageField.getText().split("(/new)")[1];
 						tchatController.canalRegistration(newChannel.trim());
+						sendMessageField.setText("");
 					}
 					if (sendMessageField.getText().equals("/quit")) {
 						tchatController.logout();
@@ -110,6 +141,7 @@ public class TchatIndex extends JFrame {
 						dispose();
 						LoginFormController loginController = new LoginFormController();
 					}
+					
 				} else {
 					tchatIndexController.sendMessage(sendMessageField.getText());
 					sendMessageField.setText("");
@@ -152,6 +184,52 @@ public class TchatIndex extends JFrame {
 
 		canalsMembersPanel.setLayout(new BoxLayout(canalsMembersPanel, BoxLayout.PAGE_AXIS));
 		canalsMembersPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+		
+		canalsField.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				int start;
+				int line;
+				int end;
+				String text = null;
+				try {
+					line = canalsField.getLineOfOffset( canalsField.getCaretPosition() );
+					start = canalsField.getLineStartOffset( line );
+					end = canalsField.getLineEndOffset( line );
+					text = canalsField.getDocument().getText(start, end - start);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				tchatController.canalRegistration(text.trim());
+			}
+		});
 
 		memberLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		canalLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -163,31 +241,7 @@ public class TchatIndex extends JFrame {
 		return canalsMembersPanel;
 	}
 
-	public JTextArea setMessageField(String login, String message) {
-		String newligne = System.getProperty("line.separator");
-		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		messageField.append("[" + timeStamp + "] - <" + login + "> : " + message + newligne + newligne);
-		return messageField;
-	}
-
-	public JTextArea setCanalField(JSONArray canals) {
-		canalsField.setText("");
-		String newligne = System.getProperty("line.separator");
-		canals.forEach(canal -> {
-			canalsField.append(canal.toString() + newligne);
-		});
-		return canalsField;
-	}
-
-	public JTextArea setMembersField(JSONArray members) {
-		membersField.setText("");
-		String newligne = System.getProperty("line.separator");
-		members.forEach(member -> {
-			membersField.append("<" + member.toString() + ">" + newligne);
-		});
-		return membersField;
-	}
-
+	
 	public JPanel getMessagePanel() {
 		messageField.setEditable(false);
 		messagePane = new JScrollPane(messageField);

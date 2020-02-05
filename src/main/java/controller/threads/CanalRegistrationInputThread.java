@@ -45,6 +45,7 @@ public class CanalRegistrationInputThread implements Runnable {
 			obj.put("channel", oldChannel);
 			obj.put("target_channel", newChannel);
 			final String msg = obj.toString();
+			System.out.println(msg);
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();

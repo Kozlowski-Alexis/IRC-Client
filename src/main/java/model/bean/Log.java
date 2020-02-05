@@ -42,7 +42,8 @@ public class Log {
 		return date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDate(Date localDateTime) {
+		this.date = localDateTime;
 	}
+
 }
