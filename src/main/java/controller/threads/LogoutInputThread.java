@@ -5,9 +5,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import view.ModalException;
@@ -60,6 +57,7 @@ public class LogoutInputThread implements Runnable {
 				if(pw != null) {
 					pw.close();
 				}
+				client.close();
 			} catch (IOException e) {
 				ModalException closeError = new ModalException("Erreur lors de la fermeture de la connexion");
 			}

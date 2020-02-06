@@ -8,6 +8,7 @@ import model.DAOFactory;
 import model.DAOLog;
 import model.bean.Log;
 import view.Logs;
+import view.ModalException;
 
 public class Main {
 

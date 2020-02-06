@@ -5,26 +5,25 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
-
 import view.ModalException;
+import view.TchatIndex;
 
 public class SendMessageThread implements Runnable {
-	final Socket client;
-	final String login;
-	final String pass;
-	final String channel;
-	final String message;
+	private final Socket client;
+	private final String login;
+	private final String pass;
+	private final String channel;
+	private final String message;
+	private final TchatIndex tchat;
 
-	public SendMessageThread(Socket client, String login, String pass, String channel, String message) {
+	public SendMessageThread(Socket client, String login, String pass, String channel, String message, TchatIndex tchat) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
 		this.channel = channel;
 		this.message = message;
+		this.tchat = tchat;
 	}
 
 	@Override
@@ -50,7 +49,8 @@ public class SendMessageThread implements Runnable {
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
-
+//			client.getInputStream().read();
+			
 		} catch (IllegalStateException e) {
 			ModalException errorSocketInit = new ModalException("Erreur initialisation Socket : "+e);
 		} catch (IOException e) {

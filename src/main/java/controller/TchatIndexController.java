@@ -15,6 +15,7 @@ import model.DAOException;
 import model.DAOFactory;
 import model.DAOLog;
 import model.bean.Log;
+import view.ModalException;
 import view.TchatIndex;
 
 public class TchatIndexController {
@@ -41,27 +42,28 @@ public class TchatIndexController {
 	
 	public void sendMessage(String message) {
 		// Start thread on client input
-		new Thread(new SendMessageThread(client, login, pass, channel, message)).start();
+		new Thread(new SendMessageThread(client, login, pass, channel, message, tchat)).start();
 		insertLog(message);
 	}
 	
 	public void canalRegistration(String newChannel) {
-		new Thread(new CanalRegistrationInputThread(client, login, pass, channel, newChannel)).start();
+		new Thread(new CanalRegistrationInputThread(client, login, pass, channel, newChannel, tchat)).start();
 		this.channel = newChannel;
 		listCanals();
 		listMembers();
 	}
 	
 	public void listCanals() {
-		new Thread(new CanalListInputThread(client, login, pass)).start();
+		new Thread(new CanalListInputThread(client, login, pass, tchat)).start();
 	}
 	
 	public void listMembers() {
-		new Thread(new MembersListInputThread(client, login, pass, channel)).start();
+		new Thread(new MembersListInputThread(client, login, pass, channel, tchat)).start();
 	}
 	
 	public void logout() {
 		new Thread(new LogoutInputThread(client, login, pass)).start();
+		ModalException disconneted = new ModalException("Déconnexion réussie");
 	}
 	
 	public void insertLog(String message) {
@@ -78,7 +80,7 @@ public class TchatIndexController {
 			
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ModalException daoException = new ModalException("Erreur BDD : "+ e);
 		}
 	}
 }

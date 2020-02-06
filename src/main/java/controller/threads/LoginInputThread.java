@@ -5,13 +5,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import view.ModalException;
+
 public class LoginInputThread implements Runnable {
-	private static final Logger LOG = Logger.getLogger(LoginInputThread.class.getName());
 	final Socket client;
 	final String login;
 	final String pass;
@@ -44,9 +42,9 @@ public class LoginInputThread implements Runnable {
 			pw.flush();
 
 		} catch (IllegalStateException e) {
-			LOG.error("Error socket init.", e);
+			ModalException illegalStateException = new ModalException("Erreur lors de l'initialisation du socket : "+ e);
 		} catch (IOException e) {
-			LOG.error("Error during getting socket outputstream.", e);
-		}
+			ModalException iOException = new ModalException("Erreur lors de la récupération des requêtes serveur : "+ e);
+		} 
 	}
 }

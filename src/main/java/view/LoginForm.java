@@ -62,18 +62,16 @@ public class LoginForm extends JFrame{
 	}
 	
 	public JPanel getContentPanel() {
-		
 		urlPortLabel = new JLabel("url + port");
-		loginLabel = new JLabel("Login");
-		passwordLabel = new JLabel("Mot de passe");
 		urlPortLabel.setForeground(Color.white);
+		
+		loginLabel = new JLabel("Login");
 		loginLabel.setForeground(Color.white);
+		
+		passwordLabel = new JLabel("Mot de passe");
 		passwordLabel.setForeground(Color.white);
 		
-		
 		final JPanel labelPanel = new JPanel(new GridLayout(3 , 5, 5 , 5));
-		
-		
 		labelPanel.add(urlPortLabel);
 		labelPanel.add(loginLabel);
 		labelPanel.add(passwordLabel);
@@ -81,30 +79,33 @@ public class LoginForm extends JFrame{
 		labelPanel.setBackground(Color.decode("#434343"));
 		
 		final JPanel urlPortPanel = new JPanel(new BorderLayout());
-		urlPortField = new JTextField(30);
+		urlPortField = new JTextField(28);
 		urlPortField.setBackground(Color.decode("#4a86e8"));
 		urlPortField.setForeground(Color.white);
 		urlPortField.setFont(new Font("Arial", Font.BOLD, 13));
 		urlPortField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		urlPortField.setDocument(new FieldLimit(30));
 		urlPortPanel.add(urlPortField);
 		urlPortPanel.setBorder(new LineBorder(Color.white, 2, true));
 		
 		final JPanel loginPanel = new JPanel(new BorderLayout());
-		loginField = new JTextField(30);
+		loginField = new JTextField(28);
 		loginField.setBackground(Color.decode("#4a86e8"));
 		loginField.setForeground(Color.white);
 		loginField.setFont(new Font("Arial", Font.BOLD, 13));
 		loginField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		loginField.setDocument(new FieldLimit(40));
 		loginPanel.add(loginField);
 		loginPanel.setBorder(new LineBorder(Color.white, 2, true));
 		
 		
 		final JPanel passwordPanel = new JPanel(new BorderLayout());
-		passwordField = new JPasswordField(30);
+		passwordField = new JPasswordField(28);
 		passwordField.setBackground(Color.decode("#4a86e8"));
 		passwordField.setForeground(Color.white);
 		passwordField.setFont(new Font("Arial", Font.BOLD, 13));
 		passwordField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		passwordField.setDocument(new FieldLimit(40));
 		passwordPanel.add(passwordField);
 		passwordPanel.setBorder(new LineBorder(Color.white, 2, true));
 		

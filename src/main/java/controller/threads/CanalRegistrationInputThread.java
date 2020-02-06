@@ -10,20 +10,24 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-public class CanalRegistrationInputThread implements Runnable {
-	private static final Logger LOG = Logger.getLogger(CanalRegistrationInputThread.class.getName());
-	final Socket client;
-	final String login;
-	final String pass;
-	final String oldChannel;
-	final String newChannel;
+import view.ModalException;
+import view.TchatIndex;
 
-	public CanalRegistrationInputThread(Socket client, String login, String pass, String oldChannel, String newChannel) {
+public class CanalRegistrationInputThread implements Runnable {
+	private final Socket client;
+	private final String login;
+	private final String pass;
+	private final String oldChannel;
+	private final String newChannel;
+	private final TchatIndex tchat;
+
+	public CanalRegistrationInputThread(Socket client, String login, String pass, String oldChannel, String newChannel, TchatIndex tchat) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
 		this.oldChannel = oldChannel;
 		this.newChannel = newChannel;
+		this.tchat = tchat;
 	}
 
 	@Override
@@ -45,15 +49,15 @@ public class CanalRegistrationInputThread implements Runnable {
 			obj.put("channel", oldChannel);
 			obj.put("target_channel", newChannel);
 			final String msg = obj.toString();
-			System.out.println(msg);
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
+//			client.getInputStream().read();
 
 		} catch (IllegalStateException e) {
-			LOG.error("Error socket init.", e);
+			ModalException illegalStateException = new ModalException("Erreur lors de l'initialisation du socket : "+ e);
 		} catch (IOException e) {
-			LOG.error("Error during getting socket outputstream.", e);
+			ModalException iOException = new ModalException("Erreur lors de la récupération des requêtes serveur : "+ e);
 		} 
 	}
 }

@@ -52,7 +52,7 @@ public class LoginScreenThread implements Runnable {
 		        	this.loginView.dispatchEvent(new WindowEvent(this.loginView, WindowEvent.WINDOW_CLOSING));
 		        	running = false;
 		        } else {
-		        	ModalException exception = new ModalException("Erreur dans les identifiants");
+		        	ModalException exception = new ModalException(message);
 		        	running = false;
 		        }
 				// Read the next line readed on the network stream.

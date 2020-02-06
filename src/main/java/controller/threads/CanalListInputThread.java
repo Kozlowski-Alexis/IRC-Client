@@ -10,16 +10,20 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-public class CanalListInputThread implements Runnable {
-	private static final Logger LOG = Logger.getLogger(CanalListInputThread.class.getName());
-	final Socket client;
-	final String login;
-	final String pass;
+import view.ModalException;
+import view.TchatIndex;
 
-	public CanalListInputThread(Socket client, String login, String pass) {
+public class CanalListInputThread implements Runnable {
+	private final Socket client;
+	private final String login;
+	private final String pass;
+	private final TchatIndex tchat;
+
+	public CanalListInputThread(Socket client, String login, String pass, TchatIndex tchat) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
+		this.tchat = tchat;
 	}
 
 	@Override
@@ -42,12 +46,13 @@ public class CanalListInputThread implements Runnable {
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
+//			client.getInputStream().read();
 
 		} catch (IllegalStateException e) {
-			LOG.error("Error socket init.", e);
+			ModalException illegalStateException = new ModalException("Erreur lors de l'initialisation du socket : "+ e);
 		} catch (IOException e) {
-			LOG.error("Error during getting socket outputstream.", e);
-		} 
+			ModalException iOException = new ModalException("Erreur lors de la récupération des requêtes serveur : "+ e);
+		}
 	}
 
 }

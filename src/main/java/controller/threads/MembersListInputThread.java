@@ -5,23 +5,24 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-public class MembersListInputThread implements Runnable {
-	private static final Logger LOG = Logger.getLogger(MembersListInputThread.class.getName());
-	final Socket client;
-	final String login;
-	final String pass;
-	final String channel;
+import view.ModalException;
+import view.TchatIndex;
 
-	public MembersListInputThread(Socket client, String login, String pass, String channel) {
+public class MembersListInputThread implements Runnable {
+	private final Socket client;
+	private final String login;
+	private final String pass;
+	private final String channel;
+	private final TchatIndex tchat;
+
+	public MembersListInputThread(Socket client, String login, String pass, String channel, TchatIndex tchat) {
 		this.client = client;
 		this.login = login;
 		this.pass = pass;
 		this.channel = channel;
+		this.tchat = tchat;
 	}
 
 	@Override
@@ -45,11 +46,12 @@ public class MembersListInputThread implements Runnable {
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
+//			client.getInputStream().read();
 
 		} catch (IllegalStateException e) {
-			LOG.error("Error socket init.", e);
+			ModalException illegalStateException = new ModalException("Erreur lors de l'initialisation du socket : "+ e);
 		} catch (IOException e) {
-			LOG.error("Error during getting socket outputstream.", e);
+			ModalException iOException = new ModalException("Erreur lors de la récupération des requêtes serveur : "+ e);
 		} 
 	}
 

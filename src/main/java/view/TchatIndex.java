@@ -56,11 +56,13 @@ public class TchatIndex extends JFrame {
 		this.client = client;
 		this.tchatController = tchatController;
 		final Container content = getContentPane();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				tchatController.logout();
+				dispose();
+				LoginFormController loginController = new LoginFormController();
 			}
 		});
 		content.add(getSendMessagePanel(tchatController), BorderLayout.SOUTH);
@@ -70,7 +72,7 @@ public class TchatIndex extends JFrame {
 		this.setSize(1080, 900);
 		setVisible(true);
 	}
-	
+
 	public JTextArea setCanalField(JSONArray canals) {
 		canalsField.setText("");
 		messageField.setText("");
@@ -89,7 +91,7 @@ public class TchatIndex extends JFrame {
 		});
 		return membersField;
 	}
-	
+
 	public JTextArea setMessageField(String login, String message) {
 		String newligne = System.getProperty("line.separator");
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -97,18 +99,19 @@ public class TchatIndex extends JFrame {
 		return messageField;
 	}
 
-
 	public JPanel getSendMessagePanel(TchatIndexController tchatIndexController) {
-		submitButton = new JButton("Envoyer");
 		sendMessageField = new JTextArea(4, 4);
-		sendMessagePane = new JScrollPane(sendMessageField);
 		sendMessageField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 		sendMessageField.setBackground(Color.decode("#4a86e8"));
 		sendMessageField.setForeground(Color.white);
 		sendMessageField.setFont(new Font("Arial", Font.BOLD, 13));
+		sendMessageField.setDocument(new FieldLimit(255));
+		sendMessageField.setLineWrap(true);
 
-		submitButton.setMargin(new Insets(0, 98, 0, 100));
+		sendMessagePane = new JScrollPane(sendMessageField);
+
+		submitButton = new JButton("Envoyer");
+		submitButton.setMargin(new Insets(0, 103, 0, 100));
 		submitButton.setBackground(Color.decode("#4a86e8"));
 		submitButton.setForeground(Color.white);
 		submitButton.setFont(new Font("Arial", Font.BOLD, 13));
@@ -129,19 +132,18 @@ public class TchatIndex extends JFrame {
 		submitButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				if (sendMessageField.getText().startsWith("/")) {
-					if (sendMessageField.getText().startsWith("/new")) {
+				if (sendMessageField.getText().trim().startsWith("/")) {
+					if (sendMessageField.getText().trim().startsWith("/new")) {
 						String newChannel = sendMessageField.getText().split("(/new)")[1];
 						tchatController.canalRegistration(newChannel.trim());
 						sendMessageField.setText("");
 					}
-					if (sendMessageField.getText().equals("/quit")) {
+					if (sendMessageField.getText().trim().equals("/quit")) {
 						tchatController.logout();
-						setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 						dispose();
 						LoginFormController loginController = new LoginFormController();
 					}
-					
+
 				} else {
 					tchatIndexController.sendMessage(sendMessageField.getText());
 					sendMessageField.setText("");
@@ -184,50 +186,52 @@ public class TchatIndex extends JFrame {
 
 		canalsMembersPanel.setLayout(new BoxLayout(canalsMembersPanel, BoxLayout.PAGE_AXIS));
 		canalsMembersPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
-		
+
 		canalsField.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				int start;
 				int line;
 				int end;
 				String text = null;
 				try {
-					line = canalsField.getLineOfOffset( canalsField.getCaretPosition() );
-					start = canalsField.getLineStartOffset( line );
-					end = canalsField.getLineEndOffset( line );
+					line = canalsField.getLineOfOffset(canalsField.getCaretPosition());
+					start = canalsField.getLineStartOffset(line);
+					end = canalsField.getLineEndOffset(line);
 					text = canalsField.getDocument().getText(start, end - start);
+					if (!text.isEmpty()) {
+						tchatController.canalRegistration(text.trim());
+					}
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				tchatController.canalRegistration(text.trim());
 			}
 		});
 
@@ -241,7 +245,6 @@ public class TchatIndex extends JFrame {
 		return canalsMembersPanel;
 	}
 
-	
 	public JPanel getMessagePanel() {
 		messageField.setEditable(false);
 		messagePane = new JScrollPane(messageField);
@@ -249,6 +252,7 @@ public class TchatIndex extends JFrame {
 		messageField.setForeground(Color.white);
 		messageField.setFont(new Font("Arial", Font.BOLD, 13));
 		messageField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		messageField.setLineWrap(true);
 
 		titleLabel = new JLabel("Tchat IRC", SwingConstants.CENTER);
 		titleLabel.setForeground(Color.white);
@@ -274,5 +278,11 @@ public class TchatIndex extends JFrame {
 		contentPanel.add(messagePanel, BorderLayout.CENTER);
 
 		return contentPanel;
+	}
+
+	public void close() {
+		tchatController.logout();
+		dispose();
+		LoginFormController loginController = new LoginFormController();
 	}
 }
