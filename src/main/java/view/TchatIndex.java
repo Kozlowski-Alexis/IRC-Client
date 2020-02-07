@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -151,6 +153,28 @@ public class TchatIndex extends JFrame {
 
 			}
 		});
+		sendMessageField.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+	                submitButton.doClick();
+	             }
+				
+			}
+		});
 
 		return sendMessagePanel;
 	}
@@ -279,10 +303,11 @@ public class TchatIndex extends JFrame {
 
 		return contentPanel;
 	}
-
+	
 	public void close() {
 		tchatController.logout();
 		dispose();
 		LoginFormController loginController = new LoginFormController();
 	}
+
 }

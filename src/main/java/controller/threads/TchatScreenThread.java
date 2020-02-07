@@ -36,10 +36,26 @@ public class TchatScreenThread implements Runnable {
 
 				// Read the first line of the network stream
 				String line = br.readLine();
-				line = br.readLine();
-				
 				while (true) {
-					if (isJSONValid(line)) {
+					if (line.isEmpty()) {
+						ModalException errorServerUnreachable = new ModalException("Serveur injoignable !");
+						try {
+							if(in != null) {
+								in.close();
+							}
+							if(isr != null) {
+								isr.close();
+							}
+							if(br != null) {
+								br.close();
+							}
+							client.close();
+							tchatView.close();
+							
+						} catch (IOException e) {
+							ModalException closeError = new ModalException("Erreur lors de la fermeture de la connexion");
+						} 
+					} else if (isJSONValid(line)) {
 						JSONObject jsonObject = new JSONObject(line);
 						Integer code = jsonObject.getInt("code");
 						if (130 == code) {
@@ -61,26 +77,8 @@ public class TchatScreenThread implements Runnable {
 							String message = jsonObject.getString("message");
 							ModalException exception = new ModalException(message);
 						}
-						line = br.readLine();
-					} else if (line == "-1") {
-						ModalException errorServerUnreachable = new ModalException("Serveur injoignable !");
-						try {
-							if(in != null) {
-								in.close();
-							}
-							if(isr != null) {
-								isr.close();
-							}
-							if(br != null) {
-								br.close();
-							}
-							client.close();
-							tchatView.close();
-							
-						} catch (IOException e) {
-							ModalException closeError = new ModalException("Erreur lors de la fermeture de la connexion");
-						} 
 					}
+					line = br.readLine();
 				}
 
 			} catch (IOException e) {

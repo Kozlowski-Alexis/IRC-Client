@@ -49,7 +49,6 @@ public class SendMessageThread implements Runnable {
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
-//			client.getInputStream().read();
 			
 		} catch (IllegalStateException e) {
 			ModalException errorSocketInit = new ModalException("Erreur initialisation Socket : "+e);

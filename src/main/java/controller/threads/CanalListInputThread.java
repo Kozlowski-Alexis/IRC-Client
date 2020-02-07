@@ -46,7 +46,6 @@ public class CanalListInputThread implements Runnable {
 			// Print and flush the msg in the pipeline
 			pw.println(msg);
 			pw.flush();
-//			client.getInputStream().read();
 
 		} catch (IllegalStateException e) {
 			ModalException illegalStateException = new ModalException("Erreur lors de l'initialisation du socket : "+ e);
